@@ -1,0 +1,44 @@
+version:  "2"
+services:
+#注意每个服务都必须通过 image 指令指定镜像或 build 指令（需要 Dockerfile）等来自动构建生成镜像。
+#如果使用 build 指令，在 Dockerfile 中设置的选项(例如：CMD, EXPOSE, VOLUME, ENV 等) 将会自动被获取，无需在 docker-compose.yml 中再次设置。
+  myapp:
+    image: "mydompose:v1.0"
+    hostname: "mydompose"
+    container_name: "mydompose-t1"
+#    networks:
+#      "mynetwork0"
+    ports:
+      - "1234:5001"
+    build:
+      context: .
+      dockerfile: ./src/file.df
+      args:
+        arg1: 1
+        arg2: 2
+        arg3: 3
+#    cap_drop:
+#      - "CAP_NET_BIND_SERVICE"
+    depends_on:
+      - redis
+
+# 两边主机通讯时。docker默认会给service名称添加dns信息，但是没有给hostname添加信息。
+#我猜测这个应该和icc=false有关，虽然手动添加hostname dns信息到/etc/hosts可以，ip互通也可以。
+
+  redis:
+    image: "redis:alpine"
+    hostname: "myredis"
+    container_name: "myredis-t1"
+#    networks:
+#      "mynetwork0"
+    ports:
+      - "6379:6379"
+    volumes:
+      - "/home/hanxu/tmp/"
+#   配置内存交换区
+    tmpfs:
+      - /tmp
+      - /run
+
+
+

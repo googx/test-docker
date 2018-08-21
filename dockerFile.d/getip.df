@@ -1,0 +1,7 @@
+FROM getip:v1.0.0
+ARG version=x86_64
+RUN yum install -y curl.${version}
+RUN echo ${version}
+WORKDIR /root/test/
+ENTRYPOINT [ "curl", "-s", "http://ip.cn" ]
+

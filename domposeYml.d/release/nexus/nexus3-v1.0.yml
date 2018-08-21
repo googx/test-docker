@@ -1,0 +1,55 @@
+version:  "2"
+services:
+  nexus3:
+    image: mynexus3:v1.0
+    hostname: mynexus3
+    container_name: mynexus3
+    ports:
+      - 8000:8081
+    build:
+      context: .
+      dockerfile: nexus3-v1.0.df
+#    os环境变量
+    env_file:
+      - env.d/envFile.env
+      - env.d/common.env
+#     os 环境变量 如果配置了env_file, 冲突的条目以最后配置的为准
+    environment:
+      author: "hx940929"
+#   labels，docker的metadata元信息，有点像是java的头注释信息，用来对这个镜像说明点什么
+    labels:
+      com.thesunboy.name: "hanxu"
+      com.thesunboy.mynexus.version:  "v1.1"
+      com.thesunboy.github: "github.com/hx940929/"
+      com.thesunboy.listen: "GPL2.0"
+#    功能和/etc/hosts一样，实际实现也是一样
+    extra_hosts:
+      - "idea.thesunboy.com:10.193.1.2"
+#    健康检查，注意需要安装curl，建议使用busybox
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost:8081"]
+      interval: 2m30s
+      timeout: 15s
+      retries: 3
+    logging:
+#      driver: "none"
+#      driver: "syslog" options: syslog-address: "tcp://192.168.0.42:123"
+#      driver: "json-file"
+      driver: "json-file"
+      options:
+        max-size: "500k"
+        max-file: "10"
+#    network_mode: "bridge","host","none","service:[service name]","container:[container name/id]",
+#    network_mode: "bridge"
+#    volumes:
+#      - /date/docker/nexus3:/nexus-data
+
+#    networks:
+#      mynexusNet:
+#        driver:
+#          bridge
+
+#跟主机系统共享进程命名空间。打开该选项的容器之间，以及容器和宿主机系统之间可以通过进程 ID 来相互访问和操作。
+#    pid: "host"
+
+

@@ -1,0 +1,12 @@
+FROM python:3.6-alpine
+#as baseos
+RUN pip install redis flask
+#EXPOSE 6379
+
+#FROM baseos as apps
+ADD . /code
+WORKDIR /code
+RUN echo $test
+#CMD ["python", "./src/app.py"]
+CMD ["python","./src/mypy.py"]
+EXPOSE 5001

@@ -1,0 +1,8 @@
+FROM alpine:latest
+#/usr/lib/libreoffice
+
+COPY /libreoffice /usr/lib/
+
+ENV LANG=en_US.UTF-8
+ENV author=hanxu
+

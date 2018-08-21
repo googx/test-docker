@@ -1,0 +1,11 @@
+#分阶段部署- 普通shell实现，分阶段部署，多个dockFile文件 file 2/3
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /root/
+
+COPY app .
+
+CMD ["./app"]
+

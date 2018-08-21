@@ -1,0 +1,33 @@
+#健康检查，通过应用自定义状态，返回值来告诉docker的健康状态
+#从而douker可以进行应用的调度和监控。
+#https://yeasy.gitbooks.io/docker_practice/content/image/dockerfile/healthcheck.html
+
+#HEALTHCHECK 支持下列选项：
+#
+#    --interval=<间隔>：两次健康检查的间隔，默认为 30 秒；
+#    --timeout=<时长>：健康检查命令运行超时时间，如果超过这个时间，本次健康检查就被视为失败，默认 30 秒；
+#    --retries=<次数>：当连续失败指定次数后，则将容器状态视为 unhealthy，默认 3 次。
+#
+#和 CMD, ENTRYPOINT 一样，HEALTHCHECK 只可以出现一次，如果写了多个，只有最后一个生效。
+
+FROM mynginx:v1.0.1
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+HEALTHCHECK --interval=20s --timeout=30s --retries=10 \
+  CMD curl -fs http://localhost/ || exit 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

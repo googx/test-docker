@@ -1,0 +1,35 @@
+version:  "2"
+services:
+  myredis:
+    image: myredis:v1.0
+    hostname: myredis
+    container_name: myredis
+    ports:
+      - 6379:6379
+    build:
+      context: .
+      dockerfile: redis/myredis-v1.0.df
+    env_file:
+      - env.d/envFile.env
+      - env.d/common.env
+    labels:
+      com.thesunboy.name: "hanxu"
+      com.thesunboy.myredis.version:  "v1.0"
+      com.thesunboy.github: "github.com/hx940929/"
+      com.thesunboy.listen: "GPL2.0"
+  myDb:
+    image: mmysql:v1.0
+    hostname: mmysql
+    container_name: mmysql
+    ports:
+      - 3306:3306
+    build:
+      context: .
+      dockerfile: mysql/mmysql-v1.0.df
+
+
+#    networks:
+#      mynexusNet:
+#        driver:
+#          bridge
+

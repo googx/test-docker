@@ -1,0 +1,8 @@
+imageIso/
+tmp/
+build/
+.swp
+.idea/
+*.ipr
+*.iws
+*.iml

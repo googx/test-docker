@@ -1,0 +1,6 @@
+FROM centos
+ENV a=1 b=2 c=3
+RUN echo "a=${a},b=${b},sum=$(${a}+${b})}"
+
+#容器启动命令是exec和ENTRYPOINT， run是构建命令
+ENTRYPOINT ["/bin/echo","a=${a},b=${b}"]

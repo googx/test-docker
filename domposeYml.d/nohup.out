@@ -1,0 +1,10 @@
+#kill-15 -> PID:[6833],rdpId:[wbi]
+
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+loading channel cliprdr
+connected to 192.168.2.205:3389
+#kill-15 -> PID:[5053],rdpId:[wbi]
+
+Gtk-Message: GtkDialog mapped without a transient parent. This is discouraged.
+loading channel cliprdr
+connected to 192.168.2.205:3389

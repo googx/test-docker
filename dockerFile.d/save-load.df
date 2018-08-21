@@ -1,0 +1,12 @@
+#保存镜像的命令为：
+#
+#$ docker save alpine | gzip > alpine-latest.tar.gz
+#
+#然后我们将 alpine-latest.tar.gz 文件复制到了到了另一个机器上，可以用下面这个命令加载镜像：
+#
+#$ docker load -i alpine-latest.tar.gz
+#Loaded image: alpine:latest
+#
+#如果我们结合这两个命令以及 ssh 甚至 pv 的话，利用 Linux 强大的管道，我们可以写一个命令完成从一个机器将镜像迁移到另一个机器，并且带进度条的功能：
+#
+#docker save <镜像名> | bzip2 | pv | ssh <用户名>@<主机名> 'cat | docker load'

@@ -1,0 +1,17 @@
+FROM mynginx:latest
+#docker,build命令从指定的上下文路径
+#docker build -t mynginx:v1.0.2 .（.就是上下文路径） -f ../dockerFile.d/nginx.df
+#copy命令的数据源./txt， 就是指定的上下文路径的txt文件
+#docker，build在执行dockerFile文件时，会把指定的上下文路径的的东西全部打一个包，发到docker 服务端守护进程里。
+#上下文中不需要打包的东西，可以使用.dockerignore 忽略文件过滤掉。
+#更多关于长下文，以及build操作见https://yeasy.gitbooks.io/docker_practice/content/image/build.html
+#COPY ./txt /var/txt.txt
+#RUN cat /var/txt.txt >> /usr/share/nginx/html/index.html \
+#    && rm -rf /var/txt.txt;
+#每一次run命令都会创建一层镜像，所以应该在每一层的最后及时的清楚不需要的垃圾文件。避免镜像层的臃肿。
+#CMD ["nginx","-g","daemon off;"]
+#CMD  [ "curl", "-s", "http://ip.cn" ]
+#WORKDIR /work/nginx/
+#ENTRYPOINT ["/usr/sbin/nginx","-g","daemon on;"]
+VOLUME ["/usr/share/nginx/htmll"]
+#EXPOSE 80

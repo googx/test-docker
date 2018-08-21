@@ -1,0 +1,26 @@
+#FROM centos
+#COPY firefox.tar.gz /usr/local/firefox/
+#RUN tar -xvf /usr/local/firefox/firefox.tar.gz
+#CMD /firefox/firefox
+# 用你自己的 uid /gid 替换下面的0
+#RUN export uid=0 gid=0
+#RUN mkdir -p /home/developer
+#RUN echo "developer:x:${uid}:${gid}:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd
+#RUN echo "developer:x:${uid}:" >> /etc/group
+#RUN echo "developer ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#RUN chmod 0440 /etc/sudoers
+#RUN chown ${uid}:${gid} -R /home/developer
+#USER developer
+#ENV HOME /home/developer
+FROM alpine:latest
+ENV URL https://www.baidu.com
+
+RUN apk --no-cache --update add firefox-esr dbus-x11 ttf-ubuntu-font-family \
+    && adduser -S normaluser \
+    && echo "normaluser:normaluser" | chpasswd
+USER normaluser
+CMD firefox --new-instance ${URL}
+
+
+
+
