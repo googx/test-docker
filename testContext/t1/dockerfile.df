@@ -1,0 +1,10 @@
+FROM python:3.7-alpine
+#告诉用户,应用暴露的端口是5001, 如果使用的-P 参数,也会自动分配宿主机随机端口映射到这个声明的端口.
+EXPOSE 5001 6001
+#建立一层构建过程,产生一层镜像4
+RUN pip install flask
+#构建时使用的上下文路径须是testContext/t1/
+ADD ./appfile/* /data/
+WORKDIR /data
+
+CMD ["python","/data/app.py"]

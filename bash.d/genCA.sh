@@ -12,9 +12,11 @@
 #/O 表示组织名；/CN 通用名称。
 
 workDir=$(pwd);
-keyname=;
-domain=;
-subject="/C=CN/ST=hunan/L=chansha/O=mycompany/CN=copylight by hanxu.thesunboy.com";
+rootkeyname="thesunboy.com";
+keyname="";
+domain="";
+rootSubject="/C=CN/ST=hunan/L=chansha/O=TheSunBoy/CN=hanxu Root CA";
+siteSubject="/C=CN/ST=hunan/L=chansha/O=TheSunBoy/CN=docker.thesunboy.com";
 function init(){
     if [ ! -d ${tmpDir} ]; then
          mkdir ${tmpDir} && cd ${tmpDir} || exit 1;
@@ -33,19 +35,19 @@ function init(){
 }
 #第一步创建 CA 私钥
 #第二步利用私钥创建 CA 根证书请求文件
-function genKeyAndCsr(){
-    echo "genKeyAndCsr>>>";
-    openssl genrsa -out "${keyname}.root.key" 4096;
+function genCArootKeyAndCsr(){
+    echo "genCArootKeyAndCsr>>>";
+    openssl genrsa -out "${rootkeyname}.root.key" 4096;
 #    echo sss$?
 #    if [[ $? -eq "0" ]]; then
-    openssl req -new -key "${keyname}.root.key" -out "${keyname}.root.csr" -sha256 -subj "${subject}";
+    openssl req -new -key "${rootkeyname}.root.key" -out "${rootkeyname}.root.csr" -sha256 -subj "${rootSubject}";
 #    fi
-    echo "genKeyAndCsr<<<:$?";
+    echo "genCArootKeyAndCsr<<<:$?";
 }
 
 
 #第三步配置 CA 根证书，新建 root-ca.cnf。
-function genCAcnf(){
+function genCArootCnf(){
     echo "genCAcnf>>>";
 
     cnftxt="[root_ca]
@@ -57,16 +59,27 @@ subjectKeyIdentifier=hash";
 }
 
 #第四步签发根证书。
-function genCrt(){
-    echo "genCrt>>>";
+function genCArootCrt(){
+    echo "genRootCrt>>>";
 
-    openssl x509 -req  -days 3650  -in "${keyname}.root.csr" \
-               -signkey "${keyname}.root.key" -sha256 -out "${keyname}.root.crt" \
-               -extfile "${keyname}.root.cnf" -extensions root_ca
-    echo "genCrt<<<:$?";
+    openssl x509 -req  -days 3650  -in "${rootkeyname}.root.csr" \
+               -signkey "${rootkeyname}.root.key" -sha256 -out "${rootkeyname}.root.crt" \
+               -extfile "${rootkeyname}.root.cnf" -extensions root_ca
+    echo "genRootCrt<<<:$?";
 }
+
+#第五步生成站点 SSL 私钥
+function genSiteSSLkey(){
+        openssl genrsa -out "${keyname}.site.key" 4096
+}
+
+#第六步使用私钥生成证书请求文件
+function genSiteSSLcsr() {
+    openssl req -new -key "${keyname}.site.key" -out "${keyname}.site.csr" -sha256 -subj "${siteSubject}";
+}
+
 #第七步配置证书，新建 site.cnf 文件。
-function gensiteCnf(){
+function genSiteSslCnf(){
     local sitecnf="[server]
 authorityKeyIdentifier=keyid,issuer
 basicConstraints = critical,CA:FALSE
@@ -75,6 +88,13 @@ keyUsage = critical, digitalSignature, keyEncipherment
 subjectAltName = DNS:${domain}
 subjectKeyIdentifier=hash";
     echo "${sitecnf}" >> ${workDir}/${keyname}.site.cnf
+}
+
+#第八步签署站点 SSL 证书。
+function genSiteSslCrt(){
+    openssl x509 -req -days 750 -in "${keyname}.site.csr" -sha256 \
+    -CA "${rootkeyname}.root.crt" -CAkey "${rootkeyname}.root.key"  -CAcreateserial \
+    -out "${domain}.site.crt" -extfile "${keyname}.site.cnf" -extensions server
 }
 
 case $1 in
@@ -87,25 +107,19 @@ case $1 in
         shift;
         params=$@;
          init $params;
-        genCAcnf $params;
+        genCArootCnf $params;
     ;;
     "gen")
         shift;
         params=$@;
         init $params;
-        genKeyAndCsr;
-        genCAcnf;
-        genCrt;
-
-#        第五步生成站点 SSL 私钥
-        openssl genrsa -out "${keyname}.domain.key" 4096
-#        第六步使用私钥生成证书请求文件
-        openssl req -new -key "${keyname}.domain.key" -out "${keyname}.site.csr" -sha256 -subj "${subject}";
-        gensiteCnf;
-
-        openssl x509 -req -days 750 -in "${keyname}.site.csr" -sha256 \
-    -CA "${keyname}.root.crt" -CAkey "${keyname}.root.key"  -CAcreateserial \
-    -out "${domain}.domain.crt" -extfile "${keyname}.site.cnf" -extensions server
+#        genCArootKeyAndCsr;
+#        genCArootCnf;
+#        genCArootCrt;
+        genSiteSSLkey;
+        genSiteSSLcsr;
+        genSiteSslCnf;
+        genSiteSslCrt;
 
     ;;
     "apply")
