@@ -11,8 +11,8 @@ services:
     ports:
       - "1234:5001"
     build:
-      context: .
-      dockerfile: ./src/file.df
+      context: ../..
+      dockerfile: src/file.df
       args:
         arg1: 1
         arg2: 2

@@ -1,0 +1,112 @@
+version: "3.6"
+services:
+  node1:
+    image: elcolio/etcd:latest
+    hostname: etcd_s1
+    container_name: etdc_s1
+    volumes:
+      - /data/docker/etdc_s1:/etcd-data
+    expose:
+      - 2379
+      - 2380
+    networks:
+      cluster_net:
+      ipv4_address: 172.16.238.100
+    environment:
+      - ETCDCTL_API=3
+    command:
+      - /bin/etcd
+      - --data-dir=/etcd-data
+      - -name
+      - etcd_s1
+      - --initial-advertise-peer-urls
+      - http://172.16.238.101:2380
+      - --listen-peer-urls
+      - http://0.0.0.0:2380
+      - --advertise-client-urls
+      - http://172.16.238.100:2379
+      - --listen-client-urls
+      - http://0.0.0.0:2379
+      - --initial-cluster
+      - node1=http://172.16.238.101:2380,node2=http://172.16.238.102:2380,node3=http://172.16.238.103:2380
+      - --initial-cluster-state
+      - new
+      - --initial-cluster-token
+      - docker-etcd
+  node2:
+    image: elcolio/etcd:latest
+    hostname: etcd_s2
+    container_name: etcd_s2
+    volumes:
+      - /data/docker/etdc_s2:/etcd-data
+    networks:
+    cluster_net:
+      ipv4_address: 172.16.238.102
+    environment:
+      - ETCDCTL_API=3
+    expose:
+      - 2379
+      - 2380
+    command:
+      - /bin/etcd
+      - --data-dir=/etcd-data
+      - --name
+      - etcd_s2
+      - --initial-advertise-peer-urls
+      - http://172.16.238.102:2380
+      - --listen-peer-urls
+      - http://0.0.0.0:2380
+      - --advertise-client-urls
+      - http://172.16.238.102:2379
+      - --listen-client-urls
+      - http://0.0.0.0:2379
+      - --initial-cluster
+      - node1=http://172.16.238.101:2380,node2=http://172.16.238.102:2380,node3=http://172.16.238.103:2380
+      - --initial-cluster-state
+      - new
+      - --initial-cluster-token
+      - docker-etcd
+  node3:
+    image: elcolio/etcd:latest
+    hostname: etcd_s3
+    container_name: etcd_s3
+    volumes:
+      - /data/docker/etdc_s3:/etcd-data
+    networks:
+    cluster_net:
+      ipv4_address: 172.16.238.103
+    environment:
+      - ETCDCTL_API=3
+    expose:
+      - 2379
+      - 2380
+    command:
+      - /bin/etcd
+      - --data-dir=/etcd-data
+      - --name
+      - etcd_s3
+      - --initial-advertise-peer-urls
+      - http://172.16.238.102:2380
+      - --listen-peer-urls
+      - http://0.0.0.0:2380
+      - --advertise-client-urls
+      - http://172.16.238.102:2379
+      - --listen-client-urls
+      - http://0.0.0.0:2379
+      - --initial-cluster
+      - node1=http://172.16.238.101:2380,node2=http://172.16.238.102:2380,node3=http://172.16.238.103:2380
+      - --initial-cluster-state
+      - new
+      - --initial-cluster-token
+      - docker-etcd
+volumes:
+  /data/docker/etdc_s1:
+  /data/docker/etdc_s2:
+  /data/docker/etdc_s3:
+networks:
+  cluster_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.238.0/24

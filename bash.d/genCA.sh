@@ -16,7 +16,7 @@ rootkeyname="thesunboy.com";
 keyname="";
 domain="";
 rootSubject="/C=CN/ST=hunan/L=chansha/O=TheSunBoy/CN=hanxu Root CA";
-siteSubject="/C=CN/ST=hunan/L=chansha/O=TheSunBoy/CN=docker.thesunboy.com";
+siteSubject="/C=CN/ST=hunan/L=chansha/O=TheSunBoy/CN=www.thesunboy.com";
 function init(){
     if [ ! -d ${tmpDir} ]; then
          mkdir ${tmpDir} && cd ${tmpDir} || exit 1;

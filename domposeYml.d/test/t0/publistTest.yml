@@ -4,19 +4,19 @@ services:
   web:
     build:
       context: .
-      dockerfile: ./src/file.df
+      dockerfile: src/file.df
     expose:
       - "1234"
       - "123"
     env_file:
-      - ./src/test.env
+      - src/test.env
     ports:
       - "1234:5001"
     logging:
       driver: syslog
       options:
         max-size: "200k"
-        max-file: "10
+        max-file: "10"
   rediss:
     image: "redis:alpine"
 
