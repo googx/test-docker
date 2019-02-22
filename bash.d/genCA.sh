@@ -10,13 +10,22 @@
 #以上命令中 -subj 参数里的 /C 表示国家，
 #如 CN；/ST 表示省；/L 表示城市或者地区；
 #/O 表示组织名；/CN 通用名称。
+#TODO 需要解决的问题有 使用证书携带自定义参数信息如何实现? 参考 -extfile "${rootkeyname}.root.cnf" -extensions root_ca选项如何设置.
+#TODO 如何为安装包实现 数字签名证书.
+#*.key：密钥文件，一般是SSL中的私钥；
+#
+#　　　　*.csr：证书请求文件，里面包含公钥和其他信息，通过签名后就可以生成证书；
+#
+#　　　　*.crt, *.cert：证书文件，包含公钥，签名和其他需要认证的信息，比如主机名称（IP）等。
+#
+#　　　　*.pem：里面一般包含私钥和证书的信息。
 
 workDir=$(pwd);
 rootkeyname="thesunboy.com";
 keyname="";
 domain="";
 rootSubject="/C=CN/ST=hunan/L=chansha/O=TheSunBoy/CN=hanxu Root CA";
-siteSubject="/C=CN/ST=hunan/L=chansha/O=TheSunBoy/CN=www.thesunboy.com";
+siteSubject="/C=CN/ST=hunan/L=chansha/O=TheSunBoy/CN=test.thesunboy.com/";
 function init(){
     if [ ! -d ${tmpDir} ]; then
          mkdir ${tmpDir} && cd ${tmpDir} || exit 1;
@@ -85,6 +94,7 @@ authorityKeyIdentifier=keyid,issuer
 basicConstraints = critical,CA:FALSE
 extendedKeyUsage=serverAuth
 keyUsage = critical, digitalSignature, keyEncipherment
+
 subjectAltName = DNS:${domain}
 subjectKeyIdentifier=hash";
     echo "${sitecnf}" >> ${workDir}/${keyname}.site.cnf
