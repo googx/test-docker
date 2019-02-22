@@ -3,18 +3,20 @@ services:
   node1:
     image: elcolio/etcd:latest
     hostname: etcd_s1
-    container_name: etdc_s1
+    container_name: etcd_s1
     volumes:
-      - /data/docker/etdc_s1:/etcd-data
+      - /data/docker/etcd_s1:/etcd-data
     expose:
       - 2379
       - 2380
     networks:
       cluster_net:
-      ipv4_address: 172.16.238.100
+        ipv4_address: 172.16.238.101
     environment:
       - ETCDCTL_API=3
-    command:
+#    command: echo "hello world"
+#    entrypoint: echo "hello world"
+    entrypoint:
       - /bin/etcd
       - --data-dir=/etcd-data
       - -name
@@ -24,11 +26,11 @@ services:
       - --listen-peer-urls
       - http://0.0.0.0:2380
       - --advertise-client-urls
-      - http://172.16.238.100:2379
+      - http://172.16.238.101:2379
       - --listen-client-urls
       - http://0.0.0.0:2379
       - --initial-cluster
-      - node1=http://172.16.238.101:2380,node2=http://172.16.238.102:2380,node3=http://172.16.238.103:2380
+      - etcd_s1=http://172.16.238.101:2380,etcd_s2=http://172.16.238.102:2380,etcd_s3=http://172.16.238.103:2380
       - --initial-cluster-state
       - new
       - --initial-cluster-token
@@ -38,16 +40,18 @@ services:
     hostname: etcd_s2
     container_name: etcd_s2
     volumes:
-      - /data/docker/etdc_s2:/etcd-data
+      - /data/docker/etcd_s2:/etcd-data
     networks:
-    cluster_net:
-      ipv4_address: 172.16.238.102
+      cluster_net:
+        ipv4_address: 172.16.238.102
     environment:
       - ETCDCTL_API=3
     expose:
       - 2379
       - 2380
-    command:
+#    command: echo "hello world"
+#    entrypoint: echo "hello world"
+    entrypoint:
       - /bin/etcd
       - --data-dir=/etcd-data
       - --name
@@ -61,7 +65,7 @@ services:
       - --listen-client-urls
       - http://0.0.0.0:2379
       - --initial-cluster
-      - node1=http://172.16.238.101:2380,node2=http://172.16.238.102:2380,node3=http://172.16.238.103:2380
+      - etcd_s1=http://172.16.238.101:2380,etcd_s2=http://172.16.238.102:2380,etcd_s3=http://172.16.238.103:2380
       - --initial-cluster-state
       - new
       - --initial-cluster-token
@@ -71,38 +75,41 @@ services:
     hostname: etcd_s3
     container_name: etcd_s3
     volumes:
-      - /data/docker/etdc_s3:/etcd-data
+      - /data/docker/etcd_s3:/etcd-data
     networks:
-    cluster_net:
-      ipv4_address: 172.16.238.103
+      cluster_net:
+        ipv4_address: 172.16.238.103
     environment:
       - ETCDCTL_API=3
     expose:
       - 2379
       - 2380
-    command:
+#    command: echo "hello world"
+#    entrypoint: echo "hello world"
+    entrypoint:
       - /bin/etcd
       - --data-dir=/etcd-data
       - --name
       - etcd_s3
       - --initial-advertise-peer-urls
-      - http://172.16.238.102:2380
+      - http://172.16.238.103:2380
       - --listen-peer-urls
       - http://0.0.0.0:2380
       - --advertise-client-urls
-      - http://172.16.238.102:2379
+      - http://172.16.238.103:2379
       - --listen-client-urls
       - http://0.0.0.0:2379
       - --initial-cluster
-      - node1=http://172.16.238.101:2380,node2=http://172.16.238.102:2380,node3=http://172.16.238.103:2380
+      - etcd_s1=http://172.16.238.101:2380,etcd_s2=http://172.16.238.102:2380,etcd_s3=http://172.16.238.103:2380
       - --initial-cluster-state
       - new
       - --initial-cluster-token
       - docker-etcd
-volumes:
-  /data/docker/etdc_s1:
-  /data/docker/etdc_s2:
-  /data/docker/etdc_s3:
+#
+#volumes:
+#  /data/docker/etcd_s1:
+#  /data/docker/etcd_s2:
+#  /data/docker/etcd_s3:
 networks:
   cluster_net:
     driver: bridge
@@ -110,3 +117,17 @@ networks:
       driver: default
       config:
         - subnet: 172.16.238.0/24
+
+#各个参数的详细意义见参考文档17，下面列出一些主要参数的含义如下：
+#
+#    1 name是node的名称，用于在集群中标识当前节点，etcd单节点允许迁移，迁移后名称不变即可被其他节点识别；
+#    2 etcd底层使用的kv数据库coreos/bbolt是类似于Rocksdb的一个LSM数据库实现，与Rocksdb一样数据有wal和data两种，建议两种数据分别存储到不同的存储系统上，以保证数据安全和系统性能；
+#    3 etcd底层使用的coreos/bbolt类似于rocksdb会定期做compaction以清除过期数据，上面的auto-compaction-retention指定的时间单位是小时，当然也可以借助工具etcdctl强行进行compaction，使用方法详见参考文档9#History compaction#一节；
+#    4 参考文档9#Space quota#一节建议给etcd限定磁盘使用量，以防止etcd无限度的使用磁盘导致磁盘爆满后再去做compaction导致系统响应速度下降进而导致系统不稳定，当etcd使用的磁盘额度到达限定额度的时候会发出cluster级别的alarm使集群进入maintenance模式，只接收读和删除请求，当进行compaction和defragmenting(碎片化整理)完毕留出足够空间的时候才会回到正常工作状态；
+#    5 max-request-bytes可以限制key的最大长度，此处限制长度为15KiB；
+#    5 initial-cluster-token用于标识集群的名称，initial-cluster则给出了静态cluster的各个成员的名称以及地址；
+#    6 initial-cluster-state说明单节点启动时候的状态，节点重启时这个参数值改为 existing
+#    ；
+#    7 initial-cluster列出了cluster的初始成员，cluster启动后可通过命令 etcdctl member update
+#    进行更改；
+#    8 --force-new-cluster这个选项用于创建一个单节点集群；
