@@ -1,9 +1,10 @@
-FROM python:3.7-alpine as pyenv
+#FROM python:3.7-alpine as pyenv
+FROM baseflask:latest
 #建立一层构建过程,产生一层镜像4 (cache)
 #避免多次重复下载
-RUN pip install flask
+#RUN pip install flask
 
-FROM baseflask:latest as
+#FROM baseflask:latest as
 
 
 
@@ -11,8 +12,8 @@ FROM baseflask:latest as
 EXPOSE 5001
 
 WORKDIR /data
-LABEL "name"="test-docker-py" "autherSite"="https://www.thesunboy.com" "autherName"="hx940929" "desc"="这是用来批量创建测试docker镜像的."
-LABEL "version"="v1.0"
+LABEL "build.type"="debug" "name"="test-docker-py" "autherSite"="https://www.thesunboy.com" "autherName"="hx940929" "desc"="这是用来批量创建测试docker镜像的."
+
 CMD ["python","/data/app.py"]
 
 #构建时使用的上下文路径须是testContext/t1/
