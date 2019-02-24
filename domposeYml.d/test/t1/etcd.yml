@@ -1,11 +1,13 @@
 version: "3.6"
 services:
   node1:
-    image: elcolio/etcd:latest
+#    image: elcolio/etcd:latest
+    image: quay.io/coreos/etcd:latest
     hostname: etcd_s1
     container_name: etcd_s1
     volumes:
       - /data/docker/etcd_s1:/etcd-data
+      - /etc/timezone:/etc/timezone
     expose:
       - 2379
       - 2380
@@ -14,10 +16,13 @@ services:
         ipv4_address: 172.16.238.101
     environment:
       - ETCDCTL_API=3
+      - PS1=[\u@\h]#
 #    command: echo "hello world"
 #    entrypoint: echo "hello world"
     entrypoint:
-      - /bin/etcd
+#      - alias ll='ls -hl'
+      - /usr/local/bin/etcd
+#      - /bin/etcd
       - --data-dir=/etcd-data
       - -name
       - etcd_s1
@@ -36,23 +41,25 @@ services:
       - --initial-cluster-token
       - docker-etcd
   node2:
-    image: elcolio/etcd:latest
+    image: quay.io/coreos/etcd:latest
     hostname: etcd_s2
     container_name: etcd_s2
     volumes:
       - /data/docker/etcd_s2:/etcd-data
+      - /etc/timezone:/etc/timezone
     networks:
       cluster_net:
         ipv4_address: 172.16.238.102
     environment:
       - ETCDCTL_API=3
+      - PS1=[\u@\h]#
     expose:
       - 2379
       - 2380
 #    command: echo "hello world"
 #    entrypoint: echo "hello world"
     entrypoint:
-      - /bin/etcd
+      - /usr/local/bin/etcd
       - --data-dir=/etcd-data
       - --name
       - etcd_s2
@@ -71,23 +78,25 @@ services:
       - --initial-cluster-token
       - docker-etcd
   node3:
-    image: elcolio/etcd:latest
+    image: quay.io/coreos/etcd:latest
     hostname: etcd_s3
     container_name: etcd_s3
     volumes:
       - /data/docker/etcd_s3:/etcd-data
+      - /etc/timezone:/etc/timezone
     networks:
       cluster_net:
         ipv4_address: 172.16.238.103
     environment:
       - ETCDCTL_API=3
+      - PS1=[\u@\h]#
     expose:
       - 2379
       - 2380
 #    command: echo "hello world"
 #    entrypoint: echo "hello world"
     entrypoint:
-      - /bin/etcd
+      - /usr/local/bin/etcd
       - --data-dir=/etcd-data
       - --name
       - etcd_s3
