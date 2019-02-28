@@ -12,9 +12,9 @@
 function init(){
     echo "假设已经有一个可以访问localhost:/5001/down接口的镜像已经启动."
     imageName=$1
-    docker build --file dockerfile.df --label version="init" -t "hx940929/test-py-docker:latest" .
+    docker build --file dockerfile.df --label version="init" -t "hx940929/test-py-docker:vinit" .
 #    runNewContainer "testDocker"
-    docker run -d --name testDocker -p 5001:5001 hx940929/test-py-docker:latest
+    docker run -d --name testDocker -p 5001:5001 hx940929/test-py-docker:vinit
     return 0;
 }
 
