@@ -1,0 +1,10 @@
+FROM java:openjdk-8-jre-alpine
+#这里面每一个过程都是一个CI构建
+# 9001 - appstore - master
+# 9002 - appsotre - tag
+# 9003 - manager - master
+# 9004 - manager - tag
+# 1.调用mvn 进行编译.
+# 2.编译java-springboot成功后,把构建完的目录相关copy到镜像构建目录.相关依赖库不构建到容器里,容器以挂载依赖库.
+# 3.镜像构建成功后,启动该镜像.根据逻辑 是否需要 对原有容器进行操作.
+

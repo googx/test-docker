@@ -1,0 +1,3 @@
+FROM alpine:3.7
+LABEL "name"="baseflask" "desc"="base of py 3.7" "author"="hanxu"
+#RUN pip install flask
