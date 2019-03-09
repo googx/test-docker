@@ -12,3 +12,4 @@
 docker build --file ideaServer.df --tag hx940929/ideaserver:v1.0 ../build/
 echo "打latest标签."
 docker tag hx940929/ideaserver:v1.0 hx940929/ideaserver:latest
+docker tag hx940929/ideaserver:v1.0 docker.thesunboy.com:5000/ideaserver:latest

@@ -1,14 +1,15 @@
 FROM alpine:3.7
 
+# 后期改成 直接从项目github上下载.
+COPY ./IntelliJIDEALicenseServer_linux_386 /data/IntelliJIDEALicenseServer_linux_386
+# 尽量把可能需要变动的放在copy,add,run命令的后面, 因为这之前的镜像可以构建缓存.如果改了这一层.后面的镜像需要全部重构了.
 LABEL "author"="hanxu"
+LABEL "site"="https://www.thesunboy.com"
 
-MAINTAINER "hx940929:thesunboy.com"
+MAINTAINER hx940929,thesunboy.com
 
 EXPOSE 41017
 
 WORKDIR /data
-
-# 后期改成 直接从项目github上下载.
-COPY ./IntelliJIDEALicenseServer_linux_386 /data/IntelliJIDEALicenseServer_linux_386
 
 CMD ["/data/IntelliJIDEALicenseServer_linux_386"]
