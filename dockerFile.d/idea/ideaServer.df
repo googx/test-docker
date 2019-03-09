@@ -1,0 +1,14 @@
+FROM alpine:3.7
+
+LABEL "author"="hanxu"
+
+MAINTAINER "hx940929:thesunboy.com"
+
+EXPOSE 41017
+
+WORKDIR /data
+
+# 后期改成 直接从项目github上下载.
+COPY ./IntelliJIDEALicenseServer_linux_386 /data/IntelliJIDEALicenseServer_linux_386
+
+CMD ["/data/IntelliJIDEALicenseServer_linux_386"]
