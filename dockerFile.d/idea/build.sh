@@ -10,3 +10,5 @@
 #---------------------------------------------------
 #上下文只有idea二进制程序.应该从官网下载.
 docker build --file ideaServer.df --tag hx940929/ideaserver:v1.0 ../build/
+echo "打latest标签."
+docker tag hx940929/ideaserver:v1.0 hx940929/ideaserver:latest
