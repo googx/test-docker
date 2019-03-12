@@ -1,6 +1,6 @@
 imageIso/
 tmp/
-build/
+#build/
 .swp
 .idea/
 *.ipr

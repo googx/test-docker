@@ -1,0 +1,12 @@
+FROM alpine:3.7
+
+LABEL "author"="hanxu"
+LABEL "site"="https://www.thesunboy.com"
+MAINTAINER hx940929,thesunboy.com
+
+#1.把构建上下文的相关文件复制到对应目录
+
+COPY ./fastdfs/bin/* /bin/
+
+COPY ./xbuild/config/* /etc/fdfs/
+
