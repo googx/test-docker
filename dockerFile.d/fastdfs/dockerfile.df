@@ -8,5 +8,5 @@ MAINTAINER hx940929,thesunboy.com
 
 COPY ./fastdfs/bin/* /bin/
 
-COPY ./xbuild/config/* /etc/fdfs/
+COPY ./fastdfs/config/* /etc/fdfs/
 
