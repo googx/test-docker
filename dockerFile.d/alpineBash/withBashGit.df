@@ -1,0 +1,23 @@
+FROM hx940929/alpine-bash:latest
+
+RUN cat /etc/resolv.conf && \
+    apk update && \
+    apk add --no-cache git && \
+    echo "build-time at $(date '+%Y-%m-%d %H:%M:%S')"
+
+LABEL "git-version"="2.20.1"
+LABEL "git-Dependency"="ca-certificates (20190108-r0),nghttp2-libs (1.35.1-r0),libssh2 (1.8.0-r4),libcurl (7.64.0-r1),expat (2.2.6-r0),pcre2 (10.32-r1)"
+LABEL "git-size"="29 MiB in 26 packages"
+
+# 安装git
+#(1/7) Installing ca-certificates (20190108-r0)
+#(2/7) Installing nghttp2-libs (1.35.1-r0)
+#(3/7) Installing libssh2 (1.8.0-r4)
+#(4/7) Installing libcurl (7.64.0-r1)
+#(5/7) Installing expat (2.2.6-r0)
+#(6/7) Installing pcre2 (10.32-r1)
+#(7/7) Installing git (2.20.1-r0)
+#Executing busybox-1.29.3-r10.trigger
+#Executing ca-certificates-20190108-r0.trigger
+#OK: 29 MiB in 26 packages
+#git version 2.20.1

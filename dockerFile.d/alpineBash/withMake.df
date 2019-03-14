@@ -1,0 +1,41 @@
+#FROM hx940929/alpine-bash-git:latest
+#想法, 写一个py脚本, 用来快速构建所需的镜像,构建完后自动清理构建环境,保持轻量级.
+# 不过也可以利用这样的基础环境镜像配合多阶段构建,来打造环境.
+
+FROM gcc:8
+
+
+#RUN apk add gcc libc-dev make automake autoconf libtool pcre pcre-dev zlib zlib-dev openssl-dev && \
+#    --repository https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.6/main && \
+#    --progress && \
+#    --no-cache
+#(1/28) Installing m4 (1.4.18-r1)
+ #(2/28) Installing libbz2 (1.0.6-r6)
+ #(3/28) Installing perl (5.26.3-r0)
+ #(4/28) Installing autoconf (2.69-r2)
+ #(5/28) Installing automake (1.16.1-r0)
+ #(6/28) Installing binutils (2.31.1-r2)
+ #(7/28) Installing gmp (6.1.2-r1)
+ #(8/28) Installing isl (0.18-r0)
+ #(9/28) Installing libgomp (8.2.0-r2)
+ #(10/28) Installing libatomic (8.2.0-r2)
+ #(11/28) Installing libgcc (8.2.0-r2)
+ #(12/28) Installing mpfr3 (3.1.5-r1)
+ #(13/28) Installing mpc1 (1.0.3-r1)
+ #(14/28) Installing libstdc++ (8.2.0-r2)
+ #(15/28) Installing gcc (8.2.0-r2)
+ #(16/28) Installing musl-dev (1.1.20-r3)
+ #(17/28) Installing libc-dev (0.7.1-r0)
+ #(18/28) Installing libltdl (2.4.6-r5)
+ #(19/28) Installing libtool (2.4.6-r5)
+ #(20/28) Installing make (4.2.1-r2)
+ #(21/28) Installing pkgconf (1.6.0-r0)
+ #(22/28) Installing openssl-dev (1.1.1a-r1)
+ #(23/28) Installing pcre (8.42-r1)
+ #(24/28) Installing libpcre16 (8.42-r1)
+ #(25/28) Installing libpcre32 (8.42-r1)
+ #(26/28) Installing libpcrecpp (8.42-r1)
+ #(27/28) Installing pcre-dev (8.42-r1)
+ #(28/28) Installing zlib-dev (1.2.11-r1)
+ #Executing busybox-1.29.3-r10.trigger
+ #OK: 177 MiB in 47 packages

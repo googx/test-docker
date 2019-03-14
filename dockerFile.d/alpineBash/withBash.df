@@ -1,0 +1,12 @@
+FROM alpine:3.6
+
+LABEL "author"="hanxu"
+LABEL "site"="https://www.thesunboy.com"
+LABEL "github"="https://github.com/hx940929"
+LABEL "alpine"="3.6"
+MAINTAINER hx940929,thesunboy.com
+
+RUN cat /etc/resolv.conf && \
+    apk update && \
+    apk --no-cache add bash && \
+    echo "build-time at $(date '+%Y-%m-%d %H:%M:%S')"

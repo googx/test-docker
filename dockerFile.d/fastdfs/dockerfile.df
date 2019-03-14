@@ -1,12 +1,31 @@
-FROM alpine:3.7
+FROM alpine:latest
+
+RUN cat /etc/resolv.conf && \
+    apk update && \
+    apk --no-cache add bash && \
+    echo "build-time at $(date '+%Y-%m-%d %H:%M:%S')"
+
+RUN alias ll='ls -hl'
+
 
 LABEL "author"="hanxu"
 LABEL "site"="https://www.thesunboy.com"
 MAINTAINER hx940929,thesunboy.com
 
-#1.把构建上下文的相关文件复制到对应目录
+#1.把构建上下文的相关文件复制到对应目录c
 
-COPY ./fastdfs/bin/* /bin/
+# TODO 编译安装nginx环境,整合fastdfs模块
+
+COPY ./fastdfs/bin/* /usr/bin/
 
 COPY ./fastdfs/config/* /etc/fdfs/
 
+COPY ./fastdfs/start.sh /bin/
+
+EXPOSE 80 22122 23000 8888
+
+
+
+VOLUME ["/etc/fdfs","/var/log/fastdfs"]
+
+CMD ["start.sh"]
