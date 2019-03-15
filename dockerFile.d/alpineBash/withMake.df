@@ -2,8 +2,12 @@
 #想法, 写一个py脚本, 用来快速构建所需的镜像,构建完后自动清理构建环境,保持轻量级.
 # 不过也可以利用这样的基础环境镜像配合多阶段构建,来打造环境.
 
-FROM gcc:8
+#FROM hx940929/alpine-bash-git as build-codeenv
 
+
+
+
+#COPY --from=build-codeenv /tmp
 
 #RUN apk add gcc libc-dev make automake autoconf libtool pcre pcre-dev zlib zlib-dev openssl-dev && \
 #    --repository https://mirrors.tuna.tsinghua.edu.cn/alpine/v3.6/main && \

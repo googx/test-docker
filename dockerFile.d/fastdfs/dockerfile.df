@@ -1,11 +1,36 @@
-FROM alpine:latest
+FROM gcc:8 AS  build-env
 
-RUN cat /etc/resolv.conf && \
-    apk update && \
-    apk --no-cache add bash && \
-    echo "build-time at $(date '+%Y-%m-%d %H:%M:%S')"
+RUN mkdir -p /tmp/fastdfs/ && \
+    cd /tmp/fastdfs/ && \
+    git clone https://github.com/happyfish100/libfastcommon.git --depth 1 && \
+    git clone https://github.com/happyfish100/fastdfs.git --depth 1 && \
+    wget http://nginx.org/download/nginx-1.15.4.tar.gz && \
+    git clone https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1
 
-RUN alias ll='ls -hl'
+# 编译fastdfs基础库
+RUN cd /tmp/fastdfs/libfastcommon/ && \
+    ./make.sh && \
+    ./make.sh install && \
+    ls -hl /usr/lib64/lib* && \
+    echo "build libfastcommon Successfully..."
+# 编译fastdfs
+RUN cd /tmp/fastdfs/fastdfs/ && \
+    ./make.sh && \
+    ./make.sh install && \
+    ls -hl /usr/bin/fdfs* && \
+    ls -hl /usr/lib64/lib* && \
+    ls -hl /etc/fdfs/* && \
+    echo "build fastdfs Successfully..."
+
+# 编译nginx
+
+#FROM alpine:3.8
+FROM ubuntu:16.04
+COPY --from=build-env /usr/lib64/libfastcommon.so /usr/lib64/
+COPY --from=build-env /usr/lib64/libfastcommon.so /usr/lib/
+COPY --from=build-env /usr/lib64/libfdfsclient.so /usr/lib64/
+COPY --from=build-env /usr/bin/fdfs_* /usr/bin/
+#COPY --from=build-env /etc/fdfs/ /etc/fdfs/
 
 
 LABEL "author"="hanxu"
@@ -13,10 +38,6 @@ LABEL "site"="https://www.thesunboy.com"
 MAINTAINER hx940929,thesunboy.com
 
 #1.把构建上下文的相关文件复制到对应目录c
-
-# TODO 编译安装nginx环境,整合fastdfs模块
-
-COPY ./fastdfs/bin/* /usr/bin/
 
 COPY ./fastdfs/config/* /etc/fdfs/
 
@@ -27,5 +48,6 @@ EXPOSE 80 22122 23000 8888
 
 
 VOLUME ["/etc/fdfs","/var/log/fastdfs"]
-
+#/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf start
+#CMD ["/usr/bin/fdfs_trackerd","/etc/fdfs/tracker.conf","start"]
 CMD ["start.sh"]

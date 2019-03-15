@@ -9,6 +9,7 @@
 #
 #---------------------------------------------------
 
-nohup /usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf start &
+/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf start
+
 nohup /usr/bin/fdfs_storaged /etc/fdfs/storage.conf start &
 #nohup /usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf stop &
