@@ -9,8 +9,8 @@
 #
 #---------------------------------------------------
 
-#docker build --file withBash.df --tag hx940929/alpine-bash:v1.0 .
-#docker tag hx940929/alpine-bash:v1.0 hx940929/alpine-bash:latest
+docker build --file withBash.df --tag hx940929/alpine-bash:v1.0 .
+docker tag hx940929/alpine-bash:v1.0 hx940929/alpine-bash:latest
 
 
 #docker build --file withBashGit.df --tag hx940929/alpine-bash-git:v1.0 .
@@ -18,5 +18,5 @@
 
 #docker build --file withMake.df --tag hx940929/alpine-fastdfs-gcc:v1.0 .
 #
-docker build --file withMake.df --tag hx940929/alpine-fastdfs:v1.0 .
-docker tag hx940929/alpine-fastdfs:v1.0 hx940929/alpine-fastdfs:latest
+#docker build --file withMake.df --tag hx940929/alpine-fastdfs:v1.0 .
+#docker tag hx940929/alpine-fastdfs:v1.0 hx940929/alpine-fastdfs:latest

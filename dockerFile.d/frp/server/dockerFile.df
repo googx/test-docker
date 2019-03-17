@@ -1,0 +1,14 @@
+FROM hx940929/alpine-bash:latest
+
+ADD frps* /data/
+
+#frps由于是go静态编译打包,所以可以不需要依赖,直接使用alpine.
+
+# TODO 如果frp使用容器来操作.
+#使用-P暴露端口范围,或者 使用自定义network配合iptables方式实现,
+#客户端在使用的时候,需要预先知道,服务端声明的范围,并且是否这些端口被使用了,
+#需要一个web端,使用etcd来做这些资源的控制和分配.推荐一个master-python工程来控制.
+
+EXPOSE 40000-40002
+WORKDIR /data/
+CMD ["./frps"]

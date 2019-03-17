@@ -1,9 +1,9 @@
-FROM alpine:3.6
+FROM alpine:3.8
 
 LABEL "author"="hanxu"
 LABEL "site"="https://www.thesunboy.com"
 LABEL "github"="https://github.com/hx940929"
-LABEL "alpine"="3.6"
+LABEL "alpine"="3.8"
 MAINTAINER hx940929,thesunboy.com
 
 RUN cat /etc/resolv.conf && \
