@@ -16,6 +16,7 @@ docker run -d -p 27017:27017 \
 --name mongodb_s1 \
 --hostname mongodb_s1 \
 -v /etc/timezone:/etc/timezone \
+-v /etc/localtime:/etc/localtime:ro \
 -v /data/docker/mongodb_s1/configdb:/data/configdb \
 -v /data/docker/mongodb_s1/db/:/data/db \
 -e MONGO_INITDB_ROOT_USERNAME=root \
