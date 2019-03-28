@@ -2,7 +2,7 @@
 
 #### docker 启动相关
 
-> 1. 启动一个新的mysql5.7容器
+> 1.启动一个新的mysql5.7容器
 ```
     docker run -d -p 3306:3306 \
     --name mysql57_s1 \
@@ -16,14 +16,20 @@
  
  ---
 
-> 2. 关闭 全部运行中的mysql容器
+> 2.关闭 全部运行中的mysql容器
 ```
-    docker container ls --filter name=mysql --filter status=running --quiet |xargs docker stop
+    docker container ls \ 
+    --filter name=mysql \
+    --filter status=running \ 
+    --quiet |xargs docker stop
 ```
  
  ---
 
->3. 删除 全部mysql容器
+> 3.删除 全部mysql容器
 ```
-    docker container ls --filter name=mysql --filter status=exited --quiet |xargs docker rm 
+    docker container ls \
+    --filter name=mysql \
+    --filter status=exited \
+    --quiet |xargs docker rm 
 ```
