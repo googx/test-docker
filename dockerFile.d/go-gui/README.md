@@ -1,0 +1,1 @@
+要在docker里面运行GUI,需要设置环境变量 `DISPLAY=:0`

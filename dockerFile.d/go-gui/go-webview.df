@@ -1,0 +1,16 @@
+FROM golang:latest
+
+COPY zserge/ /data/
+
+ENV GOPATH="/usr/share/golang-pkg/"
+
+RUN cd /data/zserge/c1_hello &&
+    go get
+    go build .
+
+
+
+
+# 多阶段构建
+# from fist
+ENV DISPLAY=:0
