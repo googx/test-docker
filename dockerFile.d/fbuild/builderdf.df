@@ -1,0 +1,14 @@
+FROM golang:latest
+
+MAINTAINER hanxu
+LABEL tag=builder
+
+ENV test=hxdebug GOPATH=${GOPATH}:/thirdPkg
+
+RUN echo "readme:" >> build.log 2>&1 && \
+    whoami >> build.log 2>&1 && \
+    env >> build.log 2>&1 && \
+    pwd >> build.log 2>&1 && \
+    uname -a >> build.log 2>&1 && \
+    go env >> build.log 2>&1 && \
+    go version >> build.log 2>&1
