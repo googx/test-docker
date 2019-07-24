@@ -3,7 +3,7 @@
  File Name: main.go
  Author: hanxu
  AuthorSite: http://www.thesunboy.com/
- GitSource: https://github.com/thesunboy-com/linuxShell
+ GitSource: https://github.com/googx/linuxShell
  Created Time: 2019-7-4-下午4:33
 ---------------------说明--------------------------
 
