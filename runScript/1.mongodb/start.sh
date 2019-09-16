@@ -23,3 +23,9 @@ docker run -d -p 27017:27017 \
 -e MONGO_INITDB_ROOT_PASSWORD=hxadmin1 \
 mongo:4
 
+
+导出:
+mongoexport -u root -p hxadmin1 --authenticationDatabase=admin --db pytest --collection=AmazonBookPages -o AmazonBookPages.json
+
+导入:
+mongoimport -u root -p hxadmin1 --authenticationDatabase=admin --db pytest --collection=AmazonBookPages --file= AmazonBookPages.json
