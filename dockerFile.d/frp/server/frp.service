@@ -1,0 +1,28 @@
+# Stop dance for nginx
+# =======================
+#
+# ExecStop sends SIGSTOP (graceful stop) to the nginx process.
+# If, after 5s (--retry QUIT/5) nginx is still running, systemd takes control
+# and sends SIGTERM (fast shutdown) to the main process.
+# After another 5s (TimeoutStopSec=5), and if nginx is alive, systemd sends
+# SIGKILL to all the remaining processes in the process group (KillMode=mixed).
+#
+# nginx signals reference doc:
+# http://nginx.org/en/docs/control.html
+#
+[Unit]
+Description=一个用go语言实现的高并发的tcp穿墙工具..
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/run/frp.pid
+#ExecStartPre=/usr/local/frp-server
+ExecStart=$(nohup /usr/local/frp-server/frps -c /etc/frp/frps.conf > /dev/null &)
+#ExecReload=/usr/sbin/nginx -g 'daemon on; master_process on;' -s reload
+ExecStop=$(/bin/kill -9 $(ps aux|grep frp|grep -v grep|awk '{print $2}' |xargs))
+TimeoutStopSec=5
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target
