@@ -125,7 +125,7 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.16.238.0/24
+        - subnet: 10.193.9.0/24
 
 #各个参数的详细意义见参考文档17，下面列出一些主要参数的含义如下：
 #

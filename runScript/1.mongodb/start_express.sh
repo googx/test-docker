@@ -20,7 +20,7 @@ docker rm mongodb_s1_express
 
 function getip() {
     interName=$(route -F |grep default|grep -v grep|awk '{print $8}')
-     localIp=$(ifconfig ${interName} |grep inet|grep -v grep |awk '{print $2}'|awk -F : '{print $2}'|xargs)
+     localIp=$(ifconfig ${interName} |grep inet|grep -v grep |awk '{print $2}'|awk -F : '{print $1}'|sed -n '1p'|xargs)
     echo ${localIp}
 #    echo "asdf"
 }
